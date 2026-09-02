@@ -1,0 +1,8 @@
+# Agregá acá palabras, nombres propios o términos técnicos que Whisper
+# suele transcribir mal. Una palabra o frase por línea.
+# Las líneas que empiezan con # se ignoran. Se recarga en cada dictado,
+# no hace falta reiniciar la app.
+NIKI Flow
+sistemaniki
+CAEIA
+Supabase

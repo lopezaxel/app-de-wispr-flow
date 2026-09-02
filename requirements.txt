@@ -1,0 +1,9 @@
+groq
+sounddevice
+soundfile
+numpy
+pyperclip
+keyboard
+pystray
+Pillow
+python-dotenv
