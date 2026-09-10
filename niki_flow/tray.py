@@ -1,9 +1,11 @@
 import os
+import subprocess
+import sys
 
 import pystray
 from PIL import Image, ImageDraw
 
-from .config import DICTIONARY_PATH
+from .config import BASE_DIR, DICTIONARY_PATH
 
 
 def _make_icon(color):
@@ -27,9 +29,17 @@ class Tray:
             IDLE_ICON,
             "NIKI Flow",
             menu=pystray.Menu(
+                pystray.MenuItem("Abrir panel", self._open_dashboard),
                 pystray.MenuItem("Abrir diccionario", self._open_dictionary),
                 pystray.MenuItem("Salir", self._exit),
             ),
+        )
+
+    def _open_dashboard(self, icon, item):
+        subprocess.Popen(
+            [sys.executable, "-m", "niki_flow.dashboard"],
+            cwd=str(BASE_DIR),
+            creationflags=subprocess.CREATE_NO_WINDOW,
         )
 
     def _open_dictionary(self, icon, item):

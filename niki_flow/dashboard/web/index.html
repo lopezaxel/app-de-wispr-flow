@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NIKI Flow — Panel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="rail" aria-hidden="true"></div>
+
+<div class="app">
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark">NIKI</span><span class="brand-tail">FLOW</span>
+    </div>
+    <nav class="tabs" role="tablist" aria-label="Secciones del panel">
+      <button class="tab is-active" role="tab" aria-selected="true" data-tab="resumen">Resumen</button>
+      <button class="tab" role="tab" aria-selected="false" data-tab="historial">Historial</button>
+      <button class="tab" role="tab" aria-selected="false" data-tab="diccionario">Diccionario</button>
+    </nav>
+  </header>
+
+  <main class="content">
+
+    <section class="view is-active" id="view-resumen" role="tabpanel">
+      <div class="stat-grid">
+        <article class="stat-card">
+          <div class="stat-bevel"></div>
+          <div class="stat-value" id="stat-total">—</div>
+          <div class="stat-label">Total de dictados</div>
+        </article>
+        <article class="stat-card">
+          <div class="stat-bevel"></div>
+          <div class="stat-value" id="stat-edited">—</div>
+          <div class="stat-label">Corregidos</div>
+        </article>
+        <article class="stat-card">
+          <div class="stat-bevel"></div>
+          <div class="stat-value" id="stat-words">—</div>
+          <div class="stat-label">Palabras dictadas</div>
+        </article>
+      </div>
+      <p class="empty-hint" id="resumen-empty" hidden>Todavía no dictaste nada. Los números van a aparecer acá apenas uses NIKI Flow.</p>
+    </section>
+
+    <section class="view" id="view-historial" role="tabpanel">
+      <div class="section-head">
+        <h2>Historial</h2>
+        <p class="section-sub">Más reciente primero.</p>
+      </div>
+      <ul class="history-list" id="history-list"></ul>
+      <p class="empty-hint" id="history-empty" hidden>Sin dictados todavía.</p>
+    </section>
+
+    <section class="view" id="view-diccionario" role="tabpanel">
+      <div class="section-head">
+        <h2>Diccionario</h2>
+        <p class="section-sub">Vocabulario y nombres propios que se usan como contexto en cada transcripción.</p>
+      </div>
+
+      <form class="word-form" id="word-form">
+        <input type="text" id="word-input" placeholder="Agregar palabra o frase…" autocomplete="off">
+        <button type="submit">Agregar</button>
+      </form>
+
+      <ul class="word-list" id="word-list"></ul>
+      <p class="empty-hint" id="dictionary-empty" hidden>El diccionario está vacío.</p>
+
+      <div class="section-head suggestions-head">
+        <h2>Sugerencias</h2>
+        <p class="section-sub">Correcciones repetidas detectadas en tus dictados.</p>
+      </div>
+      <ul class="suggestion-list" id="suggestion-list"></ul>
+      <p class="empty-hint" id="suggestions-empty" hidden>Todavía no hay correcciones repetidas.</p>
+    </section>
+
+  </main>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

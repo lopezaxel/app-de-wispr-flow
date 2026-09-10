@@ -6,3 +6,4 @@ NIKI Flow
 sistemaniki
 CAEIA
 Supabase
+wispr flow

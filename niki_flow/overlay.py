@@ -1,7 +1,7 @@
 import queue
 import tkinter as tk
 
-WIDTH = 150
+WIDTH = 190
 HEIGHT = 34
 MARGIN_BOTTOM = 90
 BG = "#1e1e1e"
@@ -9,6 +9,8 @@ TRANSPARENT = "#123456"
 
 COLOR_BARS = "#4da3ff"
 COLOR_TRANSCRIBING = "#e0a828"
+COLOR_CANCEL = "#888888"
+COLOR_CANCEL_HOVER = "#ffffff"
 
 BAR_COUNT = 5
 BAR_WIDTH = 4
@@ -16,6 +18,7 @@ BAR_GAP = 5
 BAR_MIN_HEIGHT = 4
 BAR_MAX_HEIGHT = 20
 BARS_START_X = 18
+CANCEL_X = WIDTH - 18
 
 
 class Overlay:
@@ -57,8 +60,15 @@ class Overlay:
             12, cy - 6, 24, cy + 6, fill=COLOR_TRANSCRIBING, outline="", state="hidden"
         )
         self.label = self.canvas.create_text(
-            WIDTH / 2 + 8, cy, text="", fill="white", font=("Segoe UI", 9), state="hidden"
+            WIDTH / 2 - 4, cy, text="", fill="white", font=("Segoe UI", 9), state="hidden"
         )
+
+        self.cancel_btn = self.canvas.create_text(
+            CANCEL_X, cy, text="✕", fill=COLOR_CANCEL, font=("Segoe UI", 10, "bold")
+        )
+        self.canvas.tag_bind(self.cancel_btn, "<Button-1>", self._on_cancel_click)
+        self.canvas.tag_bind(self.cancel_btn, "<Enter>", self._on_cancel_enter)
+        self.canvas.tag_bind(self.cancel_btn, "<Leave>", self._on_cancel_leave)
 
         self.root.withdraw()
 
@@ -66,7 +76,23 @@ class Overlay:
         self._recording = False
         self._level = 0.0
         self._level_history = [0.0] * BAR_COUNT
+        self._on_cancel = None
         self._poll()
+
+    def set_on_cancel(self, callback):
+        self._on_cancel = callback
+
+    def _on_cancel_click(self, event):
+        if self._on_cancel:
+            self._on_cancel()
+
+    def _on_cancel_enter(self, event):
+        self.canvas.itemconfig(self.cancel_btn, fill=COLOR_CANCEL_HOVER)
+        self.canvas.config(cursor="hand2")
+
+    def _on_cancel_leave(self, event):
+        self.canvas.itemconfig(self.cancel_btn, fill=COLOR_CANCEL)
+        self.canvas.config(cursor="")
 
     def _poll(self):
         try:
