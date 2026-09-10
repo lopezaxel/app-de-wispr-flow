@@ -7,8 +7,8 @@ from .config import SAMPLE_RATE
 
 SPEECH_THRESHOLD = 0.05
 MIN_SPEECH_SECONDS = 0.15
-SILENCE_SECONDS = 1.2
-MAX_RECORD_SECONDS = 25.0  # red de seguridad: nunca queda grabando para siempre
+SILENCE_SECONDS = 0.4
+MAX_RECORD_SECONDS = 600.0  # red de seguridad: nunca queda grabando para siempre
 
 
 class Recorder:
