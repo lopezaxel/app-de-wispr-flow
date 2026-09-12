@@ -3,6 +3,7 @@ import threading
 import tkinter as tk
 
 from .config import REVIEW_ENABLED, REVIEW_TIMEOUT_SECONDS
+from .queue_utils import drain_queue
 
 WIDTH = 420
 HEIGHT = 90
@@ -24,12 +25,7 @@ class ReviewPopup:
         self._poll()
 
     def _poll(self):
-        try:
-            while True:
-                action = self._queue.get_nowait()
-                action()
-        except queue.Empty:
-            pass
+        drain_queue(self._queue)
         self._root.after(30, self._poll)
 
     def request(self, text):

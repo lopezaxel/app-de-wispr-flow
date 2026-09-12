@@ -35,7 +35,12 @@ def main():
         tray.set_recording(False)
         audio = recorder.stop()
 
-        if audio is None or len(audio) < MIN_SAMPLES:
+        if audio is None:
+            # Otro hilo (on_cancel) ya cerro el stream y se encarga de la
+            # limpieza de estado; no hay nada que hacer aca.
+            return
+
+        if len(audio) < MIN_SAMPLES:
             overlay.hide()
             wakeword.resume()
             with state_lock:
@@ -75,7 +80,10 @@ def main():
         tray.set_recording(True)
         overlay.show_recording()
         wakeword.pause()
-        recorder.start(on_silence_timeout=finish_recording if auto_stop_on_silence else None)
+        recorder.start(
+            on_silence_timeout=finish_recording if auto_stop_on_silence else None,
+            on_max_duration=finish_recording,
+        )
 
     def on_hotkey_start():
         begin_recording(auto_stop_on_silence=False)
@@ -100,14 +108,18 @@ def main():
         tray.set_recording(False)
         overlay.hide()
         if audio is not None:
+            # Fuimos nosotros quienes cerramos el stream (aunque el audio
+            # capturado este vacio porque cancelamos antes del primer frame),
+            # asi que nos toca hacer toda la limpieza de estado.
             wakeword.resume()
             with state_lock:
                 state["recording"] = False
                 state["cancelled"] = False
-        # Si ya estaba transcribiendo (audio is None: el stream ya se habia
-        # cerrado antes), el flag "cancelled" hace que el worker de
-        # finish_recording descarte el resultado en vez de pegarlo, y sea el
-        # que finalmente reanude la palabra clave y cierre el estado.
+        # Si audio is None, el stream ya se habia cerrado antes (el worker de
+        # finish_recording ya tiene el audio y esta transcribiendo). El flag
+        # "cancelled" hace que ese worker descarte el resultado en vez de
+        # pegarlo, y sea el que finalmente reanude la palabra clave y cierre
+        # el estado.
 
     hotkey = PushToTalk(on_hotkey_start, on_hotkey_stop)
     hotkey.start()

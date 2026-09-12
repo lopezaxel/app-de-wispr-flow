@@ -62,8 +62,6 @@ def log_dictation(raw_text, final_text):
         dictation_id = cur.lastrowid
         if was_edited:
             for original, corrected in _extract_corrections(raw_text, final_text):
-                if not original and not corrected:
-                    continue
                 conn.execute(
                     "INSERT INTO corrections (dictation_id, original_phrase, corrected_phrase) "
                     "VALUES (?, ?, ?)",

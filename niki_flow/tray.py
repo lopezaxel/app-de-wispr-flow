@@ -24,6 +24,7 @@ RECORDING_ICON = _make_icon((220, 40, 40, 255))
 class Tray:
     def __init__(self, on_exit):
         self._on_exit = on_exit
+        self._dashboard_process = None
         self.icon = pystray.Icon(
             "niki_flow",
             IDLE_ICON,
@@ -36,7 +37,9 @@ class Tray:
         )
 
     def _open_dashboard(self, icon, item):
-        subprocess.Popen(
+        if self._dashboard_process is not None and self._dashboard_process.poll() is None:
+            return  # ya hay un panel abierto
+        self._dashboard_process = subprocess.Popen(
             [sys.executable, "-m", "niki_flow.dashboard"],
             cwd=str(BASE_DIR),
             creationflags=subprocess.CREATE_NO_WINDOW,

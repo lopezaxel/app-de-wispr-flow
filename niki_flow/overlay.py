@@ -1,6 +1,8 @@
 import queue
 import tkinter as tk
 
+from .queue_utils import drain_queue
+
 WIDTH = 190
 HEIGHT = 34
 MARGIN_BOTTOM = 90
@@ -95,12 +97,7 @@ class Overlay:
         self.canvas.config(cursor="")
 
     def _poll(self):
-        try:
-            while True:
-                action = self._queue.get_nowait()
-                action()
-        except queue.Empty:
-            pass
+        drain_queue(self._queue)
 
         if self._recording:
             self._level_history.pop(0)
